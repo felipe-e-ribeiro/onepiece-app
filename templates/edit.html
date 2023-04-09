@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Edit Edition</title>
+  </head>
+  <body>
+    <h1>Edit Edition {{ edition[1] }}</h1>
+    <form method="post">
+      <label>
+        <input type="checkbox" name="is_owned" {% if edition[2] %}checked{% endif %}>
+        Is Owned?
+      </label>
+      <button type="submit">Save</button>
+    </form>
+  </body>
+</html
