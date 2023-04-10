@@ -1,0 +1,4 @@
+Flask>=2.2.2
+Flask-MySQL
+PyMySQL
+flask_mysqldb
