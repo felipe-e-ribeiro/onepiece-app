@@ -38,10 +38,10 @@
         {% for edition in editions %}
             <div class="card">
                 {% if edition[2] %}
-                    <img src="{{ url_for('static', filename='owned_book.jpg') }}" alt="Livro Possuído"> 
+                    <a href="http://onepiece.feliperibeiro.link/edit/{{edition[0]}}" ><img src="{{ url_for('static', filename='owned_book.jpg') }}" alt="Livro Possuído"></a>
                     <p  style="color: #fff; text-align: center">Volume: {{ edition[0] }} OK</p>
                 {% else %}
-                    <img src="{{ url_for('static', filename='unowned_book.jpg') }}" alt="Livro Não Possuído">
+                    <a href="http://onepiece.feliperibeiro.link/edit/{{edition[0]}}" ><img src="{{ url_for('static', filename='unowned_book.jpg') }}" href="http://onepiece.feliperibeiro.link/edit/{{edition[0]}}"  alt="Livro Não Possuído"></a>
                     <p  style="color: #fff; text-align: center">Volume: {{ edition[0] }} Faltando</p>
                 {% endif %}
             </div>
