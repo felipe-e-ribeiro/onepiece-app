@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: onepiece-db
+  name: onepiece-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: onepiece-db
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: onepiece-db
+    spec:
+      containers:
+      - image: mariadb:10.7.8
+        name: mariadb
+        resources: {}
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MARIADB_USER
+          value: 'onepice'
+        - name: MARIADB_PASSWORD
+          value: 'opwq9021'
+        - name: MARIADB_ROOT_PASSWORD
+          value: 'opwq9021'
+        - name: MARIADB_DATABASE
+          value: 'onepiece'
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: volume-db
+      volumes:
+      - name: volume-db
+        nfs:
+          server: 10.250.252.28
+          path: /opt/storage/onepiece-db
+status: {}

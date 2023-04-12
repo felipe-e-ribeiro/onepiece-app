@@ -9,4 +9,4 @@ ENV MYSQL_USER=$MYSQL_USER
 ENV MYSQL_PASSWORD=$MYSQL_PASSWORD
 ENV MYSQL_DB=$MYSQL_DB
 ENTRYPOINT ["python3"]
-CMD ["-m", "flask", "run" ]
+CMD ["-m", "flask", "run", "--host=0.0.0.0" ]

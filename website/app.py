@@ -34,4 +34,4 @@ def edit(id):
     return render_template("edit.html", edition=edition)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0")
