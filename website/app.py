@@ -12,10 +12,12 @@ mysql = MySQL(app)
 @app.route("/")
 def index():
     cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM editions")
+    cur.execute("SELECT volume_number, is_owned FROM editions ORDER BY volume_number;")
+    owned = cur.fetchall()
+    cur.execute("SELECT arc, GROUP_CONCAT(volume_number ORDER BY volume_number SEPARATOR ', ') as volumes FROM editions GROUP BY arc ORDER BY MIN(volume_number)")
     editions = cur.fetchall()
     cur.close()
-    return render_template("index.html", editions=editions)
+    return render_template("index.html", owned=owned, editions=editions)
 
 @app.route("/edit/<int:id>", methods=["GET", "POST"])
 def edit(id):
