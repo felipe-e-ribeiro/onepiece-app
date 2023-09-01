@@ -3,43 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <title>Minha Biblioteca</title>
-    <style>
-        body {
-            background-color: #212529;
-        }
-
-        .card img {
-    width: 250px;
-    height: auto;
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+/* Reset de estilos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.card:hover {
-    box-shadow: 0 0 var(--shadow-intensity) 0 rgba(0,0,0,0.2);
+/* Estilos globais */
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('https://logosmarcas.net/wp-content/uploads/2021/10/One-Piece-Logo.png'); /* Adicione o caminho para a imagem de fundo aqui */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-color: rgba(0, 0, 0, 255); /* Cor de fundo semitransparente */
 }
 
-.container {
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.3); /* Cor de fundo com 30% de opacidade */
+    z-index: -1; /* Coloque a camada de fundo atrás do conteúdo */
+}
+
+header {
+    background-color: rgba(0, 0, 0, 0.7); /* Faz um fundo escuro semi-transparente para facilitar a leitura do conteúdo */
+    color: #fff;
+    padding: 10px 0;
+}
+
+nav ul {
+    list-style-type: none;
     display: flex;
+    justify-content: center;
 }
 
-.card {
-    margin: 10px;
-    box-shadow: 0 calc(0.1 * width) calc(0.2 * width) rgba(0, 0, 0, 0.2);
-    transition: 0.3s;
-    width: 250px;
-    flex-wrap: wrap; /* Adicionado */
+nav li {
+    margin: 0 20px;
 }
-        img {
-            width: 100%;
-        }
-        @media (max-width: 768px) {
-  .card {
-    flex-wrap: wrap;
-  }
-  .card span {
-    flex: 1 1 100px; /* ajuste a largura dos elementos para 100px */
-  }
+
+nav a {
+    text-decoration: none;
+    color: #fff;
+    transition: color 0.3s;
 }
-    </style>
+
+nav a:hover {
+    color: #ff5733; /* Cor de destaque ao passar o mouse */
+}
+
+.main-content {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9); /* Fundo semi-transparente para destacar o conteúdo */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* O resto do seu CSS permanece o mesmo */
+
+</style>
 </head>
 <body>
   <h1 style="color: #fff;">Volumes One Piece</h1>
