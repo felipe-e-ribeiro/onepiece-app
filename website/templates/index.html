@@ -1,104 +1,47 @@
+
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Minha Biblioteca</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manga Collection</title>
+    <link rel="stylesheet" href="{{ css_url }}">
 </head>
-<style>
-/* Reset de estilos */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+  <main>
+    
+    {% if message %}
 
-/* Estilos globais */
-body {
-    font-family: Arial, sans-serif;
-    background-image: url('https://logosmarcas.net/wp-content/uploads/2021/10/One-Piece-Logo.png'); /* Adicione o caminho para a imagem de fundo aqui */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-color: rgba(0, 0, 0, 255); /* Cor de fundo semitransparente */
-}
-
-body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.3); /* Cor de fundo com 30% de opacidade */
-    z-index: -1; /* Coloque a camada de fundo atrás do conteúdo */
-}
-
-header {
-    background-color: rgba(0, 0, 0, 0.7); /* Faz um fundo escuro semi-transparente para facilitar a leitura do conteúdo */
-    color: #fff;
-    padding: 10px 0;
-}
-
-nav ul {
-    list-style-type: none;
-    display: flex;
-    justify-content: center;
-}
-
-nav li {
-    margin: 0 20px;
-}
-
-nav a {
-    text-decoration: none;
-    color: #fff;
-    transition: color 0.3s;
-}
-
-nav a:hover {
-    color: #ff5733; /* Cor de destaque ao passar o mouse */
-}
-
-.main-content {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: rgba(255, 255, 255, 0.9); /* Fundo semi-transparente para destacar o conteúdo */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-/* O resto do seu CSS permanece o mesmo */
-
-</style>
-</head>
-<body>
-  <h1 style="color: #fff;">Volumes One Piece</h1>
-  {% if message %}
-      <div><strong>{{ message }}</strong></div>
-  {% endif %}
-  <div style="display: flex-basis;">
-        {% for edition in editions %}
-              <div class="card">
-                <h2 style="color: #fff;">{{ edition[0] }}</h2>
-                <div style="display: flex; flex: wrap;">
-                      {% for volume in edition[1].split(',') %}
-                        {% set index = owned[volume|int - 1] %}
-                        <span style=" margin-right: 10px;">
-                        {% if index[1] %}
-                                <a href="http://onepiece.feliperibeiro.link/edit/{{volume}}" ><img src="{{ url_for('static', filename='owned_book.jpg') }}" alt="Livro Possuído"></a>
-                                <p style="color: #fff; text-align: left">Volume: {{ volume }} OK </p>
+    {% endif %}
+          {% for edition in editions %}
+          <section class="arc">
+            <h2>{{ edition[0] }}</h2>
+                <div class="manga-grid">
+                        {% for volume in edition[1].split(',') %}
+                          {% set index = owned[volume|int - 1] %}
+                            {% if index[1] %}
+                            <div class="manga-item-owened">
+                            <a href="http://onepiece.feliperibeiro.link/edit/{{volume}}"><img src="{{ url_for('static', filename='Volume_' + volume + '.png') }}" alt="Volume 1"></a>
+                            <div class="name">Volume {{ volume }}</div>
+                            </div>
                             {% else %}
-                                <a href="http://onepiece.feliperibeiro.link/edit/{{volume}}" ><img src="{{ url_for('static', filename='unowned_book.jpg') }}"  alt="Livro Não Possuído"></a>
-                                <p style="color: #fff; text-align: left">Volume: {{ volume }} Faltando</p>
-                          {% endif %}
-                        </span>
+                            <div class="manga-item-not-owned">
+                            <a href="http://onepiece.feliperibeiro.link/edit/{{volume}}"><img src="{{ url_for('static', filename='Volume_' + volume + '.png') }}" alt="Volume 1"></a>
+                            <div class="name">Volume {{ volume }}</div>
+                            </div>
+                            {% endif %}
 
-                    {% endfor %}
-                </div>
-            </div>
-      {% endfor %}
-  </div>
-</body>
+
+                      {% endfor %}
+            </section>
+        </div>
+        {% endfor %}
+  </body>
+</main>
 </html>
