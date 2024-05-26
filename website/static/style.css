@@ -78,7 +78,7 @@ body {
   color: white; /* White text */
   padding: 10px 24px; /* Some padding */
   cursor: pointer; /* Pointer/hand icon */
-  float: left; /* Float the buttons side by side */
+  float: center; /* Float the buttons side by side */
 }
 
 /* Clear floats (clearfix hack) */
@@ -168,6 +168,13 @@ main {
   background-color: rgb(255 254 254 / 10%);
 }
 
+.add{
+  text-align: center;
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
 .manga-grid {
   display: flex;
   overflow-x: auto;  /* Habilita o scroll horizontal */
@@ -179,6 +186,13 @@ main {
 }
 
 .manga-item {
+  flex: 0 0 150px; /* Define a largura fixa dos itens */
+  width: 150px; 
+  min-width: 150px;
+  height: 220px; /* Define a altura fixa dos itens */
+}
+
+.item-error {
   flex: 0 0 150px; /* Define a largura fixa dos itens */
   width: 150px; 
   min-width: 150px;

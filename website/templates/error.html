@@ -31,17 +31,10 @@
 </head>
 <body>
   <section class="edit">
-    <h1>Alterando o volume {{edition[0]}}</h1>
-    <div class="manga-item-edit">
-      <img src="/static/Volume_{{edition[0]}}.webp" alt="Volume 1">
+    <h1>Algo falhou</h1>
+    <div class="manga-grid">
+      <img src="/static/error.jpg" alt="Volume 1">
     </div>
-    <form method="post">
-      <label class="container">
-        <input type="checkbox" name="is_owned" {% if edition[1] %}checked{% endif %}>Na cole&ccedil;&atilde;o?
-        <span class="checkmark"></span>
-        <div class="btn-group"><button type="submit">Salvar</button></div>
-      </label>
-    </form>
   </section>
 </body>
 </html>

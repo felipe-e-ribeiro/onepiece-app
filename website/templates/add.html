@@ -1,16 +1,50 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Edit Edition</title>
-  </head>
-  <body>
-    <h1>Edit Edition {{ edition[1] }}</h1>
-    <form method="post">
-      <label>
-        <input type="checkbox" name="is_owned" {% if edition[2] %}checked{% endif %}>
-        Is Owned?
-      </label>
-      <button type="submit">Save</button>
-    </form>
-  </body>
-</html
+<head>
+  <meta charset="UTF-8">
+  <title>Add Edition</title>
+  <link rel="stylesheet" href="{{ css_url }}">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: vh;
+      margin: 0;
+    }
+    .edit {
+      text-align: center;
+    }
+    .manga-item-edit {
+      margin-bottom: 20px;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .btn-group {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <section class="edit">
+  {% if edition %}
+    <h1>Alterando o volume {{ edition[0] }}</h1>
+  {% else %}
+    <h1>Adicionar Novo Volume</h1>
+  {% endif %}
+  <a></a>
+  <form method="post">
+    <div class="add">
+    <label class="container" for="arc">Arco:</label>
+    <input type="text" id="arc" name="arc" required>
+    <label class="container" for="volume">Volume:</label>
+    <input type="text" id="volume" name="volume" required></div>
+    <div class="btn-group"><button type="submit">Salvar</button>
+  </form>
+</section>
+</body>
+</html>
