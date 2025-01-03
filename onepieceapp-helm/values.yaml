@@ -6,7 +6,7 @@ onepieceapp:
   replicaCount: 1
   image:
     repository: feliperibeiro95/onepiece-app
-    tag: "2.1"
+    tag: "2.2"
   port: 5000
   serviceName: onepieceapp
   livenessProbe:
