@@ -18,13 +18,9 @@ build_and_push:
   needs:
     - check_tag
   script:
-    - echo "Using tag: $TAG_NAME"
-    - echo "Checking out code..."
     - git submodule update --init --recursive
-    - echo "Setting up Docker Buildx..."
     - docker buildx create --use
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
-    - echo "Building and pushing Docker images..."
     - docker buildx build --push --tag "$DOCKER_USER/onepiece-app:latest" --tag "$DOCKER_USER/onepiece-app:$TAG_NAME" --platform linux/amd64,linux/arm64 ./website
   only:
     - tags
