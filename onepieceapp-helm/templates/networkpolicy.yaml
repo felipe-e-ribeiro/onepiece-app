@@ -16,3 +16,8 @@ spec:
       ports:
         - protocol: TCP
           port: 3306
+    - from: []
+      ports:
+        - port: {{ .Values.onepieceapp.port }}
+          protocol: TCP
+  podSelector: {}          
