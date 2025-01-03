@@ -6,12 +6,8 @@ check_tag:
   stage: check-tag
   script:
     - echo "Checking for release tag..."
-    - |
-      TAG_NAME="${CI_COMMIT_TAG}"
-      if [ -z "$TAG_NAME" ]; then
-        echo "No tag found on this commit."
-        exit 1
-      fi
+    - TAG_NAME="${CI_COMMIT_TAG}"
+    - if [ -z "$TAG_NAME" ]; then echo "No tag found on this commit." && exit 1; fi
     - echo "TAG_NAME=$TAG_NAME" > tag_output.env
   artifacts:
     reports:
@@ -29,10 +25,6 @@ build_and_push:
     - docker buildx create --use
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
     - echo "Building and pushing Docker images..."
-    - |
-      docker buildx build --push \
-        --tag "$DOCKER_USER/onepiece-app:latest" \
-        --tag "$DOCKER_USER/onepiece-app:$TAG_NAME" \
-        --platform linux/amd64,linux/arm64 ./website
+    - docker buildx build --push --tag "$DOCKER_USER/onepiece-app:latest" --tag "$DOCKER_USER/onepiece-app:$TAG_NAME" --platform linux/amd64,linux/arm64 ./website
   only:
     - tags
