@@ -24,10 +24,8 @@ build_and_push:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
   script:
-    - echo "$DOCKER_PASSWORD - $DOCKER_USER"
     - docker buildx create --use
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
-    - docker buildx build --push --tag "$DOCKER_USER/onepiece-app:latest" --platform linux/amd64,linux/arm64 ./website
-    - docker buildx build --push --tag "$DOCKER_USER/onepiece-app:$CI_COMMIT_TAG" --platform linux/amd64,linux/arm64 ./website
+    - docker buildx build --push --tag "$DOCKER_USER/onepiece-app:latest" --tag "$DOCKER_USER/onepiece-app:$CI_COMMIT_TAG" --platform linux/amd64,linux/arm64 ./website
   only:
     - tags
