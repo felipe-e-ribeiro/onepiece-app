@@ -4,20 +4,19 @@ metadata:
   name: allow-apps-to-db
   namespace: {{ .Values.namespace }}
 spec:
-  podSelector: {}  # Aplica-se a todos os pods no namespace db
-  ingress:
-    - from:
-        - namespaceSelector:
-            matchLabels:
-              name: {{ .Values.namespace }}
-        - namespaceSelector:
-            matchLabels:
-              name: {{ .Values.namespacedb }}
-      ports:
-        - protocol: TCP
-          port: 3306
-    - from: []
-      ports:
-        - port: {{ .Values.onepieceapp.port }}
-          protocol: TCP
-  podSelector: {}          
+    egress:
+    - to:
+      - namespaceSelector:
+          matchLabels:
+            name: {{ .Values.namespacedb }}
+    ingress:
+    - ports:
+      - port: {{ .Values.onepieceapp.port }}
+        protocol: TCP
+    podSelector: {}
+    policyTypes:
+    - Ingress
+    - Egress
+kind: List
+metadata:
+  resourceVersion: ""          
