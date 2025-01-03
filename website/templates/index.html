@@ -28,17 +28,15 @@
                           {% set index = owned[volume|int - 1] %}
                             {% if index[1] %}
                             <div class="manga-item-owened">
-                            <a href="http://onepiece.feliperibeiro.link/edit/{{volume}}"><img src="{{ url_for('static', filename='Volume_' + volume + '.webp') }}" alt="Volume 1"></a>
+                            <a href="//edit/{{volume}}"><img src="{{ url_for('static', filename='Volume_' + volume + '.webp') }}" alt="Volume 1"></a>
                             <div class="name">Volume {{ volume }}</div>
                             </div>
                             {% else %}
                             <div class="manga-item-not-owned">
-                            <a href="http://onepiece.feliperibeiro.link/edit/{{volume}}"><img src="{{ url_for('static', filename='Volume_' + volume + '.webp') }}" alt="Volume 1"></a>
+                            <a href="//edit/{{volume}}"><img src="{{ url_for('static', filename='Volume_' + volume + '.webp') }}" alt="Volume 1"></a>
                             <div class="name">Volume {{ volume }}</div>
                             </div>
                             {% endif %}
-
-
                       {% endfor %}
             </section>
         </div>

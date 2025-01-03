@@ -1,0 +1,6 @@
+apiVersion: v2
+name: onepieceapp
+description: App for my One Piece collection
+type: application
+version: 0.1.0
+appVersion: "1.5.7"
