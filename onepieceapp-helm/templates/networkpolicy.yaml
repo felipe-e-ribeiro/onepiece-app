@@ -16,7 +16,4 @@ spec:
     podSelector: {}
     policyTypes:
     - Ingress
-    - Egress
-kind: List
-metadata:
-  resourceVersion: ""          
+    - Egress    
