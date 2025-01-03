@@ -12,6 +12,8 @@ check_tag:
   artifacts:
     reports:
       dotenv: tag_output.env
+  only:
+    - releases
 
 build_and_push:
   stage: build-and-push
@@ -26,4 +28,4 @@ build_and_push:
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
     - docker buildx build --push --tag "$DOCKER_USER/onepiece-app:latest" --tag "$DOCKER_USER/onepiece-app:$CI_COMMIT_TAG" --platform linux/amd64,linux/arm64 ./website
   only:
-    - [releases]
+    - releases
