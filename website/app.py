@@ -66,6 +66,24 @@ def add():
 def error():
     return render_template("error.html", css_url=url_for('static', filename='style.css'))
 
+@app.route("/healthcheck", methods=["GET"])
+def healthcheck():
+    # Testando conexão com o MySQL
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT 1;")  # Consulta simples para validar a conexão
+        cur.close()
+    except Exception as e:
+        return {"status": "unhealthy", "details": {"mysql": str(e)}}, 500
+
+    # Testando se o Flask está funcionando
+    try:
+        response = {"status": "healthy", "details": {"mysql": "connected", "flask": "running"}}
+        return response, 200
+    except Exception as e:
+        return {"status": "unhealthy", "details": {"flask": str(e)}}, 500
+
+
 @app.errorhandler(500)
 def exception_handler(e):
     return render_template('error.html'), 500
