@@ -60,7 +60,6 @@ build_and_push:
 
   script:
     - cd website
-    - ls -l
     - docker buildx create --use
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
     - docker buildx build --push --tag "$DOCKER_USER/onepiece-app:latest" --platform linux/amd64,linux/arm64 .
