@@ -29,7 +29,7 @@ generate_assets:
     - python -m venv .venv
     - . .venv/bin/activate
     - pip install --upgrade pip
-    - pip install -r requirements.txt
+    - pip install -r requirement-pipeline.txt
 
   script:
     - python volume_update.py
