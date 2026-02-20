@@ -1,2 +1,3 @@
 *__pycache__*
 *.venv*
+website/my_database.db
