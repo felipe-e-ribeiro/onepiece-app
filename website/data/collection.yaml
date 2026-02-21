@@ -1,3 +1,7 @@
-owned:
+volumes:
   - 1-59
   - 100-111
+databooks:
+  - yellow
+  - blue
+  - red

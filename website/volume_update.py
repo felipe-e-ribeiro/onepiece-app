@@ -194,37 +194,31 @@ def main():
     data = {}
 
     for arc in arcs:
-
         title = arc["title"]
-
         if title in ("Story Arcs", "Category:Filler Arcs"):
             continue
-
         safe_title = title.replace(" ", "_")
-
         print(f"➡️ {safe_title}")
-
         volumes = get_arc_volumes(safe_title, last_volume)
-
         if volumes:
             data[safe_title] = volumes
-
     # -----------------------------------------------------
     # cria mapa volume -> arc
     # -----------------------------------------------------
-
     volume_arc = {}
-
     for arc, vols in data.items():
         for v in vols:
             volume_arc.setdefault(v, arc)
-
+    # === EXCEÇÃO MANUAL AQUI ===
+    # Forçado o Volume 111 a pertencer ao arco de Elbaph  
+    if 111 in volume_arc:
+        print("⚠️ Aplicando exceção: Movendo Volume 111 para Elbaph_Arc")
+        volume_arc[111] = "Elbaph_Arc"
+    # ===========================
     # -----------------------------------------------------
     # DOWNLOADS PARALELOS
     # -----------------------------------------------------
-
     print("⬇️ Baixando capas...")
-
     results = []
 
     with ThreadPoolExecutor(max_workers=8) as executor:
