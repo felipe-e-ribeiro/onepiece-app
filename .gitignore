@@ -1,3 +1,4 @@
 *__pycache__*
 *.venv*
-website/my_database.db
+output/
+website/static/Volume_*.webp

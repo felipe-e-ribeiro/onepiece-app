@@ -1,46 +1,35 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coleção One Piece</title>
-    <link rel="stylesheet" href="{{ css_url }}">
-    <link rel="icon" type="image/x-icon" href="./static/icon.png">
-</head>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" type="image/x-icon" href="/static/icon.png">
     <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body>
-  <main>
-    
-    {% if message %}
-
-    {% endif %}
-          {% for edition in editions %}
-          <section class="arc">
-            <h2>{{ edition[0] }} Total: {{ edition[3] }} / {{ edition[2] }}</h2>
-                <div class="manga-grid">
-                        {% for volume in edition[1].split(',') %}
-                          {% set index = owned[volume|int - 1] %}
-                            {% if index[1] %}
-                            <div class="manga-item-owened">
-                            <a><img src="{{ url_for('static', filename='Volume_' + volume + '.webp') }}" alt="Volume 1"></a>
-                            <div class="name">Volume {{ volume }}</div>
-                            </div>
-                            {% else %}
-                            <div class="manga-item-not-owned">
-                            <a><img src="{{ url_for('static', filename='Volume_' + volume + '.webp') }}" alt="Volume 1"></a>
-                            <div class="name">Volume {{ volume }}</div>
-                            </div>
-                            {% endif %}
-                      {% endfor %}
-            </section>
+</head>
+<body>
+<main>
+    {% for edition in editions %}
+    <section class="arc">
+        <h2>{{ edition[0] }} Total: {{ edition[3] }} / {{ edition[2] }}</h2>
+        <div class="manga-grid">
+            {% for volume in edition[1].split(',') %}
+                {% if owned[volume|int] %}
+                <div class="manga-item-owened">
+                    <a><img src="/static/Volume_{{ volume }}.webp" alt="Volume {{ volume }}"></a>
+                    <div class="name">Volume {{ volume }}</div>
+                </div>
+                {% else %}
+                <div class="manga-item-not-owned">
+                    <a><img src="/static/Volume_{{ volume }}.webp" alt="Volume {{ volume }}"></a>
+                    <div class="name">Volume {{ volume }}</div>
+                </div>
+                {% endif %}
+            {% endfor %}
         </div>
-        {% endfor %}
-  </body>
+    </section>
+    {% endfor %}
 </main>
+</body>
 </html>

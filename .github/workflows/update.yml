@@ -1,0 +1,48 @@
+name: Update One Piece Collection
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'website/data/collection.yaml'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Run pipeline
+        env:
+          BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+        run: cd website && python volume_update.py
+
+      - name: Upload index.html to S3
+        run: aws s3 cp output/index.html s3://${{ secrets.BUCKET_NAME }}/index.html
+
+      - name: Sync static assets to S3
+        run: aws s3 sync output/static/ s3://${{ secrets.BUCKET_NAME }}/static/
+
+      # Uncomment after CLOUDFRONT_DISTRIBUTION_ID secret is configured
+      # - name: Invalidate CloudFront cache
+      #   run: |
+      #     aws cloudfront create-invalidation \
+      #       --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+      #       --paths "/*"
