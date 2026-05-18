@@ -117,15 +117,16 @@ def download_volume(volume: int, volume_arc: dict, existing_s3: set):
 
 
 def render_html(data: dict, volume_arc: dict, last_volume: int):
-    # Determina o menor volume que cada arco "possui" no mapeamento definitivo.
-    # Arcos sem volume no mapeamento (edge case de sobreposição) usam o min do wiki como fallback.
-    arc_min_owned: dict[str, int] = {}
+    # Inverte volume_arc (vol→arc) para arc→[vols], garantindo que cada volume
+    # apareça em exatamente um arco (o mesmo mapeamento autoritativo usado no download).
+    arc_volumes: dict[str, list[int]] = {}
     for vol, arc in volume_arc.items():
-        if arc not in arc_min_owned or vol < arc_min_owned[arc]:
-            arc_min_owned[arc] = vol
+        arc_volumes.setdefault(arc, []).append(vol)
+
+    arc_min_vol = {arc: min(vols) for arc, vols in arc_volumes.items()}
 
     editions = []
-    for arc, volumes in sorted(data.items(), key=lambda item: arc_min_owned.get(item[0], min(item[1]))):
+    for arc, volumes in sorted(arc_volumes.items(), key=lambda item: arc_min_vol[item[0]]):
         vols_sorted = sorted(volumes)
         clean_arc = arc.removesuffix("_Arc").replace("_", " ")
         vols_csv = ",".join(str(v) for v in vols_sorted)
