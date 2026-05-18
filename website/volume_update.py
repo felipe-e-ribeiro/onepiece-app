@@ -27,6 +27,12 @@ def fandom_image_url(filename: str) -> str:
     return f"{base}/{md5[0]}/{md5[:2]}/{filename}/revision/latest/scale-to-width-down/1000?path-prefix=pt"
 
 
+def fandom_image_url_full(filename: str) -> str:
+    base = "https://static.wikia.nocookie.net/onepiece/images"
+    md5 = hashlib.md5(filename.encode()).hexdigest()
+    return f"{base}/{md5[0]}/{md5[:2]}/{filename}/revision/latest"
+
+
 def get_existing_s3_images() -> set:
     if DRY_RUN or not BUCKET:
         return set()
@@ -107,9 +113,13 @@ def download_volume(volume: int, volume_arc: dict, existing_s3: set):
         print(f"⏭️  Volume {volume} já existe no S3, pulando download")
         return
 
-    url = fandom_image_url(f"Volume_{volume}.png")
+    filename = f"Volume_{volume}.png"
+    url = fandom_image_url(filename)
     try:
         r = session.get(url, timeout=15)
+        if r.status_code == 404:
+            print(f"⚠️  Volume {volume}: 1000px indisponível, tentando resolução original...")
+            r = session.get(fandom_image_url_full(filename), timeout=15)
         if r.status_code == 200:
             dest.write_bytes(r.content)
         else:
