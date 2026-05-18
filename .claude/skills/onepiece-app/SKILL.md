@@ -1,5 +1,5 @@
 ---
-name: preview
+name: onepiece-app
 description: >
   Fluxo completo de validação local antes de qualquer git push no projeto One Piece Collection.
   Use esta skill SEMPRE que arquivos em website/ forem alterados (Python, CSS, template HTML, YAML)
