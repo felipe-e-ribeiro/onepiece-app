@@ -116,11 +116,18 @@ def download_volume(volume: int, volume_arc: dict, existing_s3: set):
             shutil.copy(fallback, dest)
 
 
-def render_html(data: dict, last_volume: int):
+def render_html(data: dict, volume_arc: dict, last_volume: int):
+    # Determina o menor volume que cada arco "possui" no mapeamento definitivo.
+    # Arcos sem volume no mapeamento (edge case de sobreposição) usam o min do wiki como fallback.
+    arc_min_owned: dict[str, int] = {}
+    for vol, arc in volume_arc.items():
+        if arc not in arc_min_owned or vol < arc_min_owned[arc]:
+            arc_min_owned[arc] = vol
+
     editions = []
-    for arc, volumes in data.items():
-        clean_arc = arc.replace("_Arc", "").replace("_", " ")
+    for arc, volumes in sorted(data.items(), key=lambda item: arc_min_owned.get(item[0], min(item[1]))):
         vols_sorted = sorted(volumes)
+        clean_arc = arc.removesuffix("_Arc").replace("_", " ")
         vols_csv = ",".join(str(v) for v in vols_sorted)
         total = len(vols_sorted)
         owned_count = sum(1 for v in vols_sorted if collection[v])
@@ -162,8 +169,10 @@ def main():
         if volumes:
             data[safe_title] = volumes
 
+    # Arcos menores (menos volumes) têm prioridade em volumes disputados,
+    # replicando o comportamento do ORDER BY MIN(id) do SQLite antigo.
     volume_arc = {}
-    for arc, vols in data.items():
+    for arc, vols in sorted(data.items(), key=lambda item: (min(item[1]), len(item[1]))):
         for v in vols:
             volume_arc.setdefault(v, arc)
 
@@ -184,7 +193,7 @@ def main():
         )
 
     print("🖼️  Gerando index.html...")
-    render_html(data, last_volume)
+    render_html(data, volume_arc, last_volume)
 
     print("✅ Finalizado!")
 
