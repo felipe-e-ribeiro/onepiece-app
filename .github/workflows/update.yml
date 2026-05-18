@@ -40,9 +40,8 @@ jobs:
       - name: Sync static assets to S3
         run: aws s3 sync output/static/ s3://${{ secrets.BUCKET_NAME }}/static/
 
-      # Uncomment after CLOUDFRONT_DISTRIBUTION_ID secret is configured
-      # - name: Invalidate CloudFront cache
-      #   run: |
-      #     aws cloudfront create-invalidation \
-      #       --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
-      #       --paths "/*"
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUD_FRONT_NAME }} \
+            --paths "/*"
