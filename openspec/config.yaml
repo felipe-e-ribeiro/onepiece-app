@@ -18,6 +18,8 @@ context: |
     - Cada volume aparece em exatamente um arco (volume_arc é a fonte de verdade)
     - Volume 111 é hardcoded para Elbaph_Arc (override manual pós-scraping)
     - DRY_RUN=true para testes locais (pula S3, baixa tudo, gera output/)
+    - Download de imagens: tenta scale-to-width-down/1000 primeiro, fallback para /revision/latest se 404
+    - Placeholder detection: volumes no S3 com mesmo tamanho do NoPicAvailable.webp são re-baixados automaticamente
 
   Arquivos-chave:
     - website/volume_update.py   # pipeline principal
@@ -32,3 +34,5 @@ rules:
   tasks:
     - Evitar mudanças no volume_update.py que adicionem dependências de runtime
     - Qualquer lógica de apresentação deve ser resolvida em Jinja2 ou no pipeline, nunca em JS
+    - Sempre rodar pipeline localmente (DRY_RUN=true) e apresentar em http://localhost:8080 antes de git push
+    - Usar a skill local `preview` para o fluxo completo de validação
