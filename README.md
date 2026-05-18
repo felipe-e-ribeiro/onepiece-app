@@ -45,6 +45,7 @@ databooks:
   - yellow
   - blue
   - red
+  # - blue_deep   (exemplo de entrada comentada)
 ```
 
 O GitHub Actions detecta a mudança neste arquivo e dispara o pipeline automaticamente.
@@ -134,7 +135,9 @@ Configurada manualmente. Checklist de referência:
 - `index.html` — sempre sobrescrito com `aws s3 cp` (regenerado a cada run)
 - `static/` — sincronizado com `aws s3 sync` **sem** `--delete` (imagens só acumulam, nunca são removidas do S3)
 
-**Ordem dos arcos:** a API do Fandom retorna arcos por timestamp de criação da wiki, não por ordem da história. O pipeline resolve isso dando prioridade a arcos menores ao mapear volumes compartilhados, e ordenando os arcos pelo menor volume que efetivamente "possuem".
+**Deduplicação de volumes entre arcos:** o wiki do Fandom atribui alguns volumes a múltiplos arcos (ex: volume 1 aparece em Romance Dawn e Orange Town). O pipeline resolve isso construindo um mapeamento autoritativo `volume→arco` onde arcos menores têm prioridade (`setdefault`), e usando esse mapeamento invertido para montar as listas de volumes por arco no template. Cada volume aparece em exatamente um arco.
+
+**Ordem dos arcos:** a API do Fandom retorna arcos por timestamp de criação da wiki, não por ordem da história. O pipeline ordena pelo menor volume de cada arco no mapeamento final.
 
 **Override manual:** o volume 111 é forçado para o arco Elbaph porque o wiki do Fandom tem dados incorretos para ele.
 

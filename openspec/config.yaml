@@ -1,0 +1,34 @@
+schema: spec-driven
+
+context: |
+  One Piece manga collection tracker — site estático serverless.
+
+  Tech stack:
+    - Python 3 (scraping, Jinja2 rendering, boto3 upload)
+    - Jinja2 templates (renderizados em build time pelo pipeline, não em runtime)
+    - HTML/CSS puro (sem framework JS, sem bundler)
+    - GitHub Actions como único runtime
+    - AWS S3 (hosting estático) + CloudFront (CDN)
+
+  Convenções:
+    - Não há servidor. Todo processamento acontece no pipeline Python (volume_update.py)
+    - O template index.html recebe: editions (list de tuples) e owned (dict vol→bool)
+    - Volumes owned: sem estilização nas imagens além de border #ccc
+    - Volumes not-owned: opacity 0.18 apenas no <img>
+    - Cada volume aparece em exatamente um arco (volume_arc é a fonte de verdade)
+    - Volume 111 é hardcoded para Elbaph_Arc (override manual pós-scraping)
+    - DRY_RUN=true para testes locais (pula S3, baixa tudo, gera output/)
+
+  Arquivos-chave:
+    - website/volume_update.py   # pipeline principal
+    - website/owned.py           # expande ranges do YAML
+    - website/data/collection.yaml  # fonte de verdade da coleção
+    - website/templates/index.html  # template Jinja2
+    - website/static/style.css      # estilos (Manga & Ink)
+    - .github/workflows/update.yml  # CI/CD
+
+# Per-artifact rules (optional)
+rules:
+  tasks:
+    - Evitar mudanças no volume_update.py que adicionem dependências de runtime
+    - Qualquer lógica de apresentação deve ser resolvida em Jinja2 ou no pipeline, nunca em JS
