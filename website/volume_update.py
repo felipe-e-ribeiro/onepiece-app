@@ -41,6 +41,7 @@ def get_existing_s3_images() -> set:
     placeholder_bytes = (SCRIPT_DIR / "static" / "NoPicAvailable.webp").read_bytes()
     placeholder_size = len(placeholder_bytes)
     placeholder_md5 = hashlib.md5(placeholder_bytes).hexdigest()
+    print(f"🔍 Bucket: {BUCKET} | placeholder_size={placeholder_size} | placeholder_md5={placeholder_md5}")
     s3 = boto3.client("s3")
     paginator = s3.get_paginator("list_objects_v2")
     existing = set()
@@ -48,12 +49,16 @@ def get_existing_s3_images() -> set:
         for obj in page.get("Contents", []):
             size = obj["Size"]
             etag = obj["ETag"].strip('"')
+            name = Path(obj["Key"]).name
             # ETag pode diferir do MD5 quando o bucket usa SSE-KMS; tamanho é sempre confiável
             is_placeholder = (size == placeholder_size) or (etag == placeholder_md5)
+            vol_num = int(name.replace("Volume_", "").replace(".webp", ""))
+            if vol_num >= 113:
+                print(f"🔍 {name}: size={size} etag={etag} is_placeholder={is_placeholder}")
             if not is_placeholder:
-                existing.add(Path(obj["Key"]).name)
+                existing.add(name)
             else:
-                print(f"🔄  {Path(obj['Key']).name} é placeholder no S3 (size={size}), vai re-baixar")
+                print(f"🔄  {name} é placeholder no S3 (size={size}), vai re-baixar")
     return existing
 
 
