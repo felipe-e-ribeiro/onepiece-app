@@ -37,13 +37,15 @@ def get_existing_s3_images() -> set:
     if DRY_RUN or not BUCKET:
         return set()
     import boto3
-    placeholder_size = (SCRIPT_DIR / "static" / "NoPicAvailable.webp").stat().st_size
+    placeholder_bytes = (SCRIPT_DIR / "static" / "NoPicAvailable.webp").read_bytes()
+    placeholder_md5 = hashlib.md5(placeholder_bytes).hexdigest()
     s3 = boto3.client("s3")
     paginator = s3.get_paginator("list_objects_v2")
     existing = set()
     for page in paginator.paginate(Bucket=BUCKET, Prefix="static/Volume_"):
         for obj in page.get("Contents", []):
-            if obj["Size"] != placeholder_size:
+            etag = obj["ETag"].strip('"')
+            if etag != placeholder_md5:
                 existing.add(Path(obj["Key"]).name)
             else:
                 print(f"🔄  {Path(obj['Key']).name} é placeholder no S3, vai re-baixar")

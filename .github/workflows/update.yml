@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'website/data/collection.yaml'
+      - 'website/volume_update.py'
   workflow_dispatch:
 
 jobs:
