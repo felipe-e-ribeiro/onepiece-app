@@ -3,6 +3,7 @@ import requests
 import hashlib
 import re
 import shutil
+import time
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 from bs4 import BeautifulSoup
@@ -62,8 +63,8 @@ def get_last_volume() -> int:
         "cmlimit": 1,
         "format": "json",
     }
-    r = session.get(BASE_API, params=params).json()
-    title = r["query"]["categorymembers"][0]["title"]
+    data = fandom_api_get(params)
+    title = data["query"]["categorymembers"][0]["title"]
     return int(re.search(r"\d+", title).group())
 
 
@@ -77,8 +78,8 @@ def get_story_arcs() -> list:
         "cmdir": "asc",
         "format": "json",
     }
-    r = session.get(BASE_API, params=params).json()
-    return r["query"]["categorymembers"]
+    data = fandom_api_get(params)
+    return data["query"]["categorymembers"]
 
 
 def parse_volume_range(text: str, last_volume: int) -> list:
@@ -92,6 +93,21 @@ def parse_volume_range(text: str, last_volume: int) -> list:
     return [int(single.group())]
 
 
+def fandom_api_get(params: dict, retries: int = 5) -> dict:
+    for attempt in range(retries):
+        try:
+            r = session.get(BASE_API, params=params, timeout=20)
+            r.raise_for_status()
+            data = r.json()
+            if "error" not in data:
+                return data
+            print(f"⚠️  API error: {data['error']} (tentativa {attempt + 1}/{retries})")
+        except Exception as e:
+            print(f"⚠️  Request falhou: {e} (tentativa {attempt + 1}/{retries})")
+        time.sleep(2 ** attempt)
+    raise RuntimeError(f"API não respondeu após {retries} tentativas: {params}")
+
+
 def get_arc_volumes(title: str, last_volume: int) -> list:
     params = {
         "action": "parse",
@@ -99,7 +115,10 @@ def get_arc_volumes(title: str, last_volume: int) -> list:
         "prop": "text",
         "format": "json",
     }
-    html = session.get(BASE_API, params=params).json()["parse"]["text"]["*"]
+    data = fandom_api_get(params)
+    if "parse" not in data:
+        return []
+    html = data["parse"]["text"]["*"]
     match = re.search(r'data-source="vol".*?<div[^>]*>(.*?)</div>', html, re.S)
     if not match:
         return []
