@@ -39,17 +39,21 @@ def get_existing_s3_images() -> set:
         return set()
     import boto3
     placeholder_bytes = (SCRIPT_DIR / "static" / "NoPicAvailable.webp").read_bytes()
+    placeholder_size = len(placeholder_bytes)
     placeholder_md5 = hashlib.md5(placeholder_bytes).hexdigest()
     s3 = boto3.client("s3")
     paginator = s3.get_paginator("list_objects_v2")
     existing = set()
     for page in paginator.paginate(Bucket=BUCKET, Prefix="static/Volume_"):
         for obj in page.get("Contents", []):
+            size = obj["Size"]
             etag = obj["ETag"].strip('"')
-            if etag != placeholder_md5:
+            # ETag pode diferir do MD5 quando o bucket usa SSE-KMS; tamanho é sempre confiável
+            is_placeholder = (size == placeholder_size) or (etag == placeholder_md5)
+            if not is_placeholder:
                 existing.add(Path(obj["Key"]).name)
             else:
-                print(f"🔄  {Path(obj['Key']).name} é placeholder no S3, vai re-baixar")
+                print(f"🔄  {Path(obj['Key']).name} é placeholder no S3 (size={size}), vai re-baixar")
     return existing
 
 
