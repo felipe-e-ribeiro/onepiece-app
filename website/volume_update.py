@@ -116,12 +116,9 @@ def download_volume(volume: int, volume_arc: dict, existing_s3: set):
         return
 
     filename = f"Volume_{volume}.png"
-    url = fandom_image_url(filename)
+    url = fandom_image_url_full(filename)
     try:
         r = session.get(url, timeout=15)
-        if r.status_code == 404:
-            print(f"⚠️  Volume {volume}: 1000px indisponível, tentando resolução original...")
-            r = session.get(fandom_image_url_full(filename), timeout=15)
         if r.status_code == 200:
             dest.write_bytes(r.content)
         else:
